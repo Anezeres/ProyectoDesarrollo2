@@ -1,14 +1,18 @@
-from django.db import models
 import cloudinary
 from cloudinary.models import CloudinaryField
+from django.db import models
 
 
 class Cliente(models.Model):
     email = models.EmailField(primary_key=True)
-    ced = models.TextField(max_length=12, unique=True)
+    ced = models.TextField(max_length=12)
     tel = models.TextField(max_length=10)
     nombre = models.TextField(max_length=50)
     contrasena = models.TextField(max_length=40)
+
+    def __str__(self):
+        return self.nombre
+    
 
 
 class Administrador(models.Model):
@@ -38,12 +42,12 @@ class Producto(models.Model):
     nombre = models.TextField(max_length=100)
     precio = models.BigIntegerField()
     descripcion = models.TextField(max_length=200)
-    marca = models.ForeignKey(Marca)
-    categoria = models.ForeignKey(Categoria)
+    marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
 
 
 class Producto_img(models.Model):
-    producto = models.ForeignKey(Producto)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     img = cloudinary.models.CloudinaryField(
         folder="media/fveh_images/", overwrite=True, resource_type="", blank=False
     )
@@ -87,8 +91,8 @@ class Producto_oferta(models.Model):
 
 
 class Carrito(models.Model):
-    cliente = models.ManyToManyField(Cliente, primary_key=True)
-    producto = models.ManyToManyField(Producto)
+    cliente = models.OneToOneField(Cliente, primary_key=True, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     unids = models.PositiveIntegerField()
 
     class Meta:
