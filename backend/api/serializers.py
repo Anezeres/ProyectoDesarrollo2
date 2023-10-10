@@ -1,5 +1,3 @@
-import re
-
 from api.models import Cliente
 from rest_framework import serializers
 from api.utils.Validadores import *
