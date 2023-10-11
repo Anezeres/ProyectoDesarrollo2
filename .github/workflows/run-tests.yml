@@ -1,0 +1,50 @@
+name: Run tests
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  run-tests:
+    name: Run Django tests
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.11.6
+      volumes:
+        - ${{ github.workspace  }}:/app
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pg123
+          POSTGRES_DB: prueba
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      
+      - name: Installing dependencies
+        run: pip install -r requirements.txt
+
+      - name: Database
+        env:
+          SECRET_KEY: ${{ secrets.SECRETKEY }}
+          POSTGRES_NAME: prueba
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pg123
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+        run: python manage.py migrate
+
+      - name: Running tests
+        env:
+          SECRET_KEY: ${{ secrets.SECRETKEY }}
+          POSTGRES_NAME: prueba
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pg123
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDAPIKEY }}
+          CLOUDINARY_KEY: ${{ secrets.CLOUDAPIKEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDAPISECRET }}
+        run: python manage.py test
