@@ -1,4 +1,4 @@
-from api.models import Cliente
+from api.models import *
 from rest_framework import serializers
 from api.utils.Validadores import *
 
@@ -11,7 +11,7 @@ class ClienteSerializer(serializers.Serializer):
     contrasena = serializers.CharField()
 
     def create(self, validated_data):
-        return Cliente.objects.create(**validated_data)
+        return CustomUser.objects.create(**validated_data)
 
     def validate_email(self, value):
         if not validador_correo(value):
@@ -19,7 +19,7 @@ class ClienteSerializer(serializers.Serializer):
                 "El correo no debe ser de mas de 70 caracteres."
             )
 
-        ELEM = Cliente.objects.filter(email=value).count()
+        ELEM = CustomUser.objects.filter(email=value).count()
 
         if ELEM > 0:
             raise serializers.ValidationError(

@@ -3,4 +3,4 @@ from api.models import *
 
 # Register your models here.
 
-admin.site.register(Cliente)
+admin.site.register(CustomUser)

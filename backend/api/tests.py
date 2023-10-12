@@ -1,12 +1,12 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
-from api.models import Cliente
+#from django.contrib.auth.models import User
+from api.models import *
 
 
 class RegisterTestCase(TestCase):
     def setUp(self):
-        Cliente.objects.create(
+        CustomUser.objects.create(
             email="ola@yopmail.com",
             ced="12382435",
             tel="12345678",
@@ -14,9 +14,9 @@ class RegisterTestCase(TestCase):
             contrasena="123456789",
         )
 
-        user = User.objects.create_user("regCliente", "reg@correo.com", "12382435")
+        """user = User.objects.create_user("regCliente", "reg@correo.com", "12382435")
         user.permissions = ["api.add_Cliente"]
-        user.save()
+        user.save()"""
 
     def test_not_auth(self):
         c = APIClient()
