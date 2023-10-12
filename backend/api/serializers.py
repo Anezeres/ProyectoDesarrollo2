@@ -8,7 +8,7 @@ class ClienteSerializer(serializers.Serializer):
     ced = serializers.CharField()
     tel = serializers.CharField()
     nombre = serializers.CharField()
-    contrasena = serializers.CharField()
+    password = serializers.CharField()
 
     def create(self, validated_data):
         return CustomUser.objects.create(**validated_data)
@@ -58,7 +58,7 @@ class ClienteSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError("La ced. debe contener solo números.")
 
-    def validate_contrasena(self, value):
+    def validate_password(self, value):
         if not validador_contrasena(value):
             raise serializers.ValidationError(
                 "La contraseña debe tener entre 5 y 40 caracteres."

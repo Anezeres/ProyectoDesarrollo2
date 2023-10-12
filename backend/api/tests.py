@@ -1,6 +1,5 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
-#from django.contrib.auth.models import User
 from api.models import *
 
 
@@ -11,12 +10,12 @@ class RegisterTestCase(TestCase):
             ced="12382435",
             tel="12345678",
             nombre="Usuario Uno",
-            contrasena="123456789",
+            password="123456789",
         )
 
-        """user = User.objects.create_user("regCliente", "reg@correo.com", "12382435")
+        user = CustomUser.objects.create_user("reg@correo.com", "12382435")
         user.permissions = ["api.add_Cliente"]
-        user.save()"""
+        user.save()
 
     def test_not_auth(self):
         c = APIClient()
@@ -27,7 +26,7 @@ class RegisterTestCase(TestCase):
                 "ced": "12382435",
                 "tel": "123456",
                 "nombre": "Usuario Uno",
-                "contrasena": "123456789",
+                "password": "123456789",
             },
         )
         self.assertEquals(
@@ -41,7 +40,7 @@ class RegisterTestCase(TestCase):
         token = c.post(
             "/api-token-auth/",
             {
-                "username": "regCliente",
+                "username": "reg@correo.com",
                 "password": "12382435"
             }
         ).json()["token"]
@@ -55,7 +54,7 @@ class RegisterTestCase(TestCase):
                 "ced": "12382435",
                 "tel": "1234567",
                 "nombre": "Usuario Uno",
-                "contrasena": "1234567",
+                "password": "1234567",
             },
         )
 
@@ -69,7 +68,7 @@ class RegisterTestCase(TestCase):
         token = c.post(
             "/api-token-auth/",
             {
-                "username": "regCliente",
+                "username": "reg@correo.com",
                 "password": "12382435"
             }
         ).json()["token"]
@@ -83,7 +82,7 @@ class RegisterTestCase(TestCase):
                 "ced": "12382435",
                 "tel": "1234567",
                 "nombre": "Usuario Uno",
-                "contrasena": "1234567",
+                "password": "1234567",
             },
         )
 
@@ -98,7 +97,7 @@ class RegisterTestCase(TestCase):
         token = c.post(
             "/api-token-auth/",
             {
-                "username": "regCliente",
+                "username": "reg@correo.com",
                 "password": "12382435"
             }
         ).json()["token"]
@@ -112,7 +111,7 @@ class RegisterTestCase(TestCase):
                 "ced": "hola",
                 "tel": "1234567891a",
                 "nombre": "__cod___",
-                "contrasena": "1234567*",
+                "password": "1234567*",
             },
         )
 
@@ -122,7 +121,7 @@ class RegisterTestCase(TestCase):
                 "ced": ["La ced. debe contener solo números."],
                 "tel": ["El tel. debe contener solo números."],
                 "nombre": ["El nombre debe ser de entre 4 y 50 letras."],
-                "contrasena": ["La contraseña debe tener entre 5 y 40 caracteres."]
+                "password": ["La contraseña debe tener entre 5 y 40 caracteres."]
             }
         )
 
