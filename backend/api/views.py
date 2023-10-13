@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from api.serializers import *
 
 
-class ClienteLista(APIView):
+class RegCliente(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
