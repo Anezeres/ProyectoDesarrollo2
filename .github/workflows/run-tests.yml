@@ -10,7 +10,7 @@ jobs:
     name: Run Django tests
     runs-on: ubuntu-latest
     container:
-      image: python:3.11.6-alpine
+      image: python:3.11.6
       volumes:
         - ${{ github.workspace  }}:/app
     services:
