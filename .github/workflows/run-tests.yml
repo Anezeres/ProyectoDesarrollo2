@@ -36,7 +36,7 @@ jobs:
           POSTGRES_HOST: postgres
           POSTGRES_PORT: 5432
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDAPIKEY }}
-          CLOUDINARY_KEY: ${{ secrets.CLOUDAPIKEY }}
+          CLOUDINARY_NAME: ${{ secrets.CLOUDNAME }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDAPISECRET }}
         run: |
             cd backend
