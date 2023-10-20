@@ -38,4 +38,6 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDAPIKEY }}
           CLOUDINARY_KEY: ${{ secrets.CLOUDAPIKEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDAPISECRET }}
-        run: python ./backend/manage.py test
+        run: |
+            cd backend
+            python manage.py test
