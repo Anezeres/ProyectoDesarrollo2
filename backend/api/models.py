@@ -38,10 +38,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 class Categoria(models.Model):
     nombre = models.TextField(max_length=20)
 
+    def __str__(self):
+        return self.nombre
 
 class Marca(models.Model):
     nombre = models.TextField(max_length=20)
 
+    def __str__(self):
+        return self.nombre
 
 class Talla(models.Model):
     talla = models.TextField(max_length=3)
