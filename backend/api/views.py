@@ -1,11 +1,21 @@
-from django.shortcuts import render
+from .serializers import ProductSerializer
 from rest_framework import generics
-from .models import Producto
-from .serializers import ProductoSerializer
+from api.models import Producto
+from rest_framework.permissions import IsAdminUser
+
 
 class ProductoList(generics.ListCreateAPIView):
     queryset = Producto.objects.all()
-    serializer_class = ProductoSerializer
+    serializer_class = ProductSerializer
 
-    
-# Create your views here.
+   
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = Producto.objects.all()
+	serializer_class = ProductSerializer
+	permission_classes = [IsAdminUser]
+
+  
+class ProductCreate(generics.CreateAPIView):
+	queryset = Producto.objects.all()
+	serializer_class = ProductSerializer
+	permission_classes = [IsAdminUser]
