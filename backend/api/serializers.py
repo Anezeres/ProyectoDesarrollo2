@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from api.models import Producto
 from django.contrib.auth import get_user_model, authenticate
 from django.core.validators import MinLengthValidator
 
@@ -32,3 +33,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ["nombre", "email", "ced", "tel"]
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto
+        fields = '__all__'

@@ -1,9 +1,12 @@
+from api.models import Producto
 from django.contrib.auth import login, logout
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
 from rest_framework import permissions, status
+from rest_framework import generics
+from rest_framework.permissions import IsAdminUser
+from .serializers import *
 
 
 # Create your views here.
@@ -48,4 +51,13 @@ class UserView(APIView):
 		serializer = UserSerializer(request.user)
 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
-    
+  
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = Producto.objects.all()
+	serializer_class = ProductSerializer
+	permission_classes = [IsAdminUser]
+
+class ProductCreate(generics.CreateAPIView):
+	queryset = Producto.objects.all()
+	serializer_class = ProductSerializer
+	permission_classes = [IsAdminUser]
