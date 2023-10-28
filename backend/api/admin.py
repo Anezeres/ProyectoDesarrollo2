@@ -1,6 +1,10 @@
 from django.contrib import admin
-from api.models import *
+from .models import *
 
+
+admin.site.register(Producto)
+admin.site.register(Marca)
+admin.site.register(Categoria)
 # Register your models here.
 
 admin.site.register(CustomUser)

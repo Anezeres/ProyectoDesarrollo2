@@ -125,5 +125,10 @@ class RegisterTestCase(TestCase):
             }
         )
 
+class ProductosAPITest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
 
-# Create your tests here.
+    def test_list_productos(self):
+        response = self.client.get('/api/productos/')
+        self.assertEqual(response.status_code, 200) 

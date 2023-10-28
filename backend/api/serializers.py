@@ -1,7 +1,11 @@
-from api.models import *
 from rest_framework import serializers
+from api.models import *
+from django.contrib.auth import get_user_model, authenticate
+from django.core.validators import MinLengthValidator
 from api.utils.Validadores import *
 
+
+UserModel = get_user_model()
 
 class ClienteSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -65,3 +69,25 @@ class ClienteSerializer(serializers.Serializer):
             )
 
         return value
+    
+    
+class UserLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    ##  
+    def check_user(self, data):
+        user = authenticate(email=data['email'], password=data['password'])
+        if not user:
+                raise serializers.ValidationError('User not found')
+        return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ["nombre", "email", "ced", "tel"]
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto
+        fields = '__all__'
