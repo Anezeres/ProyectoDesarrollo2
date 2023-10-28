@@ -10,15 +10,15 @@ from .serializers import *
 
 
 # Create your views here.
-class UserRegister(APIView):
+class RegCliente(APIView):
 	permission_classes = (permissions.AllowAny,)
+	
 	def post(self, request):
-		serializer = UserRegisterSerializer(data=request.data)
-		if serializer.is_valid(raise_exception=True):
-			user = serializer.create(request.data)
-			if user:
-				return Response({"message": "Registered Successfully"}, status=status.HTTP_201_CREATED)
-		return Response(status=status.HTTP_400_BAD_REQUEST)
+		serializer = ClienteSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.create(serializer.validated_data)
+			return Response(status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserLogin(APIView):
