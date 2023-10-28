@@ -15,7 +15,7 @@ class ClienteSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def create(self, validated_data):
-        return CustomUser.objects.create(**validated_data)
+        return UserModel.objects.create_user(**validated_data)
 
     def validate_email(self, value):
         if not validador_correo(value):

@@ -52,10 +52,11 @@ class UserView(APIView):
 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
 
-class ProductoList(generics.ListCreateAPIView):
-    queryset = Producto.objects.all()
-    serializer_class = ProductSerializer
-
+class ProductoList(generics.ListAPIView):
+	queryset = Producto.objects.all()
+	serializer_class = ProductSerializer
+	permission_classes = [permissions.AllowAny]
+	
     
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Producto.objects.all()
