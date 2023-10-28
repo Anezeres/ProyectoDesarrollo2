@@ -12,8 +12,9 @@ from .serializers import *
 # Create your views here.
 class RegCliente(APIView):
 	permission_classes = (permissions.AllowAny,)
-    def post(self, request):
-    	serializer = ClienteSerializer(data=request.data)
+	
+	def post(self, request):
+		serializer = ClienteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.create(serializer.validated_data)
             return Response(status=status.HTTP_201_CREATED)
