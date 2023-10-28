@@ -14,7 +14,6 @@ class RegisterTestCase(TestCase):
         )
 
         user = CustomUser.objects.create_user("reg@correo.com", "12382435")
-        user.permissions = ["api.add_Cliente"]
         user.save()
 
     def test_not_auth(self):
@@ -43,10 +42,8 @@ class RegisterTestCase(TestCase):
                 "username": "reg@correo.com",
                 "password": "12382435"
             }
-        ).json()["token"]
+        ).json()
         
-        c.credentials(HTTP_AUTHORIZATION='Token ' + token)
-
         res = c.post(
             path="/api/cliente/",
             data={
@@ -71,10 +68,8 @@ class RegisterTestCase(TestCase):
                 "username": "reg@correo.com",
                 "password": "12382435"
             }
-        ).json()["token"]
+        ).json()
         
-        c.credentials(HTTP_AUTHORIZATION='Token ' + token)
-
         res = c.post(
             path="/api/cliente/",
             data={
@@ -100,10 +95,8 @@ class RegisterTestCase(TestCase):
                 "username": "reg@correo.com",
                 "password": "12382435"
             }
-        ).json()["token"]
+        ).json()
         
-        c.credentials(HTTP_AUTHORIZATION='Token ' + token)
-
         res = c.post(
             path="/api/cliente/",
             data={
