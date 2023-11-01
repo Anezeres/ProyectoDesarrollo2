@@ -108,7 +108,7 @@ class Producto_oferta(models.Model):
 
 
 class Carrito(models.Model):
-    cliente = models.OneToOneField(CustomUser, primary_key=True, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     unids = models.PositiveIntegerField()
 
