@@ -15,7 +15,7 @@ jobs:
         - ${{ github.workspace  }}:/app
     services:
       postgres:
-        image: postgres:16.0-alpine
+        image: postgres:16.0-alpine3.18
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: pg123
@@ -41,3 +41,22 @@ jobs:
         run: |
             cd backend
             python manage.py test
+
+  react-test:
+    if: ${{ github.event.sender.login == 'DanielFRoseroZ' || github.event.sender.login == 'Hickaro12' }}
+    name: Run React tests
+    runs-on: ubuntu-latest
+    container:
+      image: 'node:18-alpine3.18'
+      volumes:
+        - ${{ github.workspace  }}:/app
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Running tests
+      run: npm test
