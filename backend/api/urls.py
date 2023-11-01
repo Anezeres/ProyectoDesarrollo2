@@ -9,7 +9,10 @@ urlpatterns = [
 	path('user', views.UserView.as_view(), name='user'),
 	path('productDetail/<int:pk>', views.ProductDetail.as_view(), name='productDetail'),
 	path('productCreate', views.ProductCreate.as_view(), name='productCreate'),
-	path('productos/', views.ProductoList.as_view(), name='producto-list')
+	path('productos/', views.ProductoList.as_view(), name='producto-list'),
+    path('cartAdd/', views.CarritoAdd.as_view(), name='cart-add'),
+    path('cartEdit/<int:pk>', views.CarritoEdit.as_view(), name='cart-edit'),
+    path('cartCliente/<str:email>', views.CarritoList.as_view(), name='cart-cliente'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
