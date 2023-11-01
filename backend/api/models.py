@@ -38,10 +38,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 class Categoria(models.Model):
     nombre = models.TextField(max_length=20)
 
+    def __str__(self):
+        return self.nombre
 
 class Marca(models.Model):
     nombre = models.TextField(max_length=20)
 
+    def __str__(self):
+        return self.nombre
 
 class Talla(models.Model):
     talla = models.TextField(max_length=3)
@@ -104,7 +108,7 @@ class Producto_oferta(models.Model):
 
 
 class Carrito(models.Model):
-    cliente = models.OneToOneField(CustomUser, primary_key=True, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     unids = models.PositiveIntegerField()
 
