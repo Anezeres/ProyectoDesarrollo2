@@ -1,5 +1,4 @@
 from django.contrib.auth import login, logout
-from django.middleware.csrf import get_token
 from rest_framework import generics, permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -34,7 +33,7 @@ class UserLogin(APIView):
         if serializer.is_valid():
             user = serializer.check_user(data)
             login(request, user)
-            return Response({"token": get_token(request=request)}, status=status.HTTP_200_OK)
+            return Response({"message":"you're logged in"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
