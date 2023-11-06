@@ -1,7 +1,25 @@
 from rest_framework import serializers
-from .models import Producto
+from .models import *
 
-class ProductoSerializer(serializers.ModelSerializer):
+
+class MarcaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Marca
+        fields = '__all__'
+
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = '__all__'
+class ProductoImgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto_img
+        fields = '__all__'
+
+class ProductoSerializer(serializers.ModelSerializer):   
+    marca = MarcaSerializer()
+    categoria = CategoriaSerializer()
+    imagenes = ProductoImgSerializer(many = True, read_only = True)
     class Meta:
         model = Producto
-        fields = '__all__'
+        fields = ('id','nombre','precio','descripcion','marca','categoria','imagenes')
