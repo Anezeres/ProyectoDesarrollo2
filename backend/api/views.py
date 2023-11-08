@@ -4,6 +4,10 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from .models import *
 import cloudinary
+from .serializers import ProductSerializer
+from rest_framework import generics
+from api.models import Producto
+from rest_framework.permissions import IsAdminUser
 
 cloudinary.config(
     cloud_name="dm4yz0etx",
@@ -42,5 +46,16 @@ def ProductoList(request):
         return JsonResponse({"code": 3})
 
 
-    
-# Create your views here.
+
+
+   
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+	queryset = Producto.objects.all()
+	serializer_class = ProductSerializer
+	permission_classes = [IsAdminUser]
+
+  
+class ProductCreate(generics.CreateAPIView):
+	queryset = Producto.objects.all()
+	serializer_class = ProductSerializer
+	permission_classes = [IsAdminUser]
