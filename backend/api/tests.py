@@ -149,7 +149,10 @@ class CarritoTestCase(TestCase):
                     {
                         "id": 4,
                         "producto_id": 4,
-                        "unids": 1,
+                        "quantity": 1,
+                        "image": None,
+                        "name": "Pantalon generico",
+                        "description": "Pantalon muy comodo en varios colores."
                     }
                 ],
                 "count": 1,

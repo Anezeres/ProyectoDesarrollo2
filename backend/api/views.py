@@ -1,11 +1,12 @@
 from django.contrib.auth import login, logout
+from django.db.models import F
 from rest_framework import generics, permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.models import Producto
+from api.models import *
 
 from .serializers import *
 
@@ -91,7 +92,22 @@ class CarritoList(APIView):
 
     def get(self, request, email):
         query = list(
-            Carrito.objects.filter(cliente=email).values("id", "producto_id", "unids")
+            Carrito.objects.filter(cliente=email)
+            .annotate(name=F("producto_id__nombre"))
+            .annotate(description=F("producto_id__descripcion"))
+            .annotate(quantity=F("unids"))
+            .values("quantity", "id", "producto_id", "description", "name")
         )
+
+        for i in query:
+            ID = i["producto_id"]
+            img = list(Producto_img.objects.filter(producto=ID))
+
+            if len(img) == 0:
+                img = None
+            else:
+                img= img[0].img.url
+
+            i["image"] = img
 
         return Response({"data": query, "count": len(query)}, status=status.HTTP_200_OK)
