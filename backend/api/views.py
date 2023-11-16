@@ -17,7 +17,7 @@ class RegCliente(APIView):
 		serializer = ClienteSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.create(serializer.validated_data)
-			return Response(status=status.HTTP_201_CREATED)
+			return Response({"message":"Te haz registrado con exito"}, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -28,11 +28,15 @@ class UserLogin(APIView):
 	def post(self, request):
 		data = request.data
 		serializer = UserLoginSerializer(data=data)
+		if request.method == 'OPTIONS':
+			print("Hola mundo")
 		if serializer.is_valid():
 			user = serializer.check_user(data)
 			login(request, user)
 			return Response({"message":"you're logged in"}, status=status.HTTP_200_OK)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	
+		
 
 
 class UserLogout(APIView):
@@ -40,7 +44,7 @@ class UserLogout(APIView):
 	authentication_classes = ()
 	def post(self, request):
 		logout(request)
-		return Response({}, status=status.HTTP_200_OK)
+		return Response({"message":"Haz salido"}, status=status.HTTP_200_OK)
 
 
 class UserView(APIView):
