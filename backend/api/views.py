@@ -5,6 +5,8 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
 
 from api.models import *
 
@@ -55,20 +57,13 @@ class UserView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response({"user": serializer.data}, status=status.HTTP_200_OK)
-
-
-class ProductoList(generics.ListAPIView):
-    queryset = Producto.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]
-
-
+    
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminUser]
 
-
+    
 class ProductCreate(generics.CreateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductSerializer
@@ -111,3 +106,32 @@ class CarritoList(APIView):
             i["image"] = img
 
         return Response({"data": query, "count": len(query)}, status=status.HTTP_200_OK)
+      
+@api_view(["GET"])
+def ProductoList(request):
+    try:
+        aux = []
+        prod = list(Producto.objects.all())
+        imgs = list(Producto_img.objects.all())
+        
+        for i in prod:
+            temporal_img = []
+            for imagen in imgs:
+                if imagen.producto.id == i.id:
+                    temporal_img.append(imagen.img.url)
+            aux.append(
+                {
+                    "id": i.id,
+                    "nombre": i.nombre,
+                    "precio": i.precio,
+                    "marca": i.marca.nombre,
+                    "descripcion": i.descripcion,
+                    "categoria": i.categoria.nombre,
+                    "imagenes": temporal_img
+                }
+            )
+            
+
+        return JsonResponse(aux,safe=False)
+    except TimeoutError:
+        return JsonResponse({"code": 3})
