@@ -5,7 +5,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from functools import reduce
+from datetime import timedelta, datetime
 
 from api.models import *
 
@@ -118,6 +118,40 @@ class MostSoldItems(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
+        def get_fact(tipo, elems):
+            PROX = datetime(datetime.today().year, datetime.today().month, 28)
+            HOY = PROX - timedelta(weeks=4)
+
+            query = list(
+                map(
+                    (
+                        lambda x: {
+                            "id": x["id"],
+                            "nombre": x["nombre"],
+                            "categoria": x["cat"],
+                            "marca": x["marc"],
+                            "ventas": sum(
+                                map(
+                                    (lambda x: x["unids"]),
+                                    Factura_producto.objects.filter(
+                                        producto__id=x["id"]
+                                    ).values("unids")
+                                    if tipo
+                                    else Factura_producto.objects.filter(
+                                        factura__venta__fecha__range=[HOY, PROX],
+                                        producto__id=x["id"],
+                                    ).values("unids"),
+                                ),
+                            ),
+                        }
+                    ),
+                    elems,
+                )
+            )
+            query.sort(key=(lambda x: x["ventas"]), reverse=True)
+
+            return query
+
         CANT = list(
             Producto.objects.all()
             .annotate(marc=F("marca__nombre"))
@@ -125,27 +159,7 @@ class MostSoldItems(APIView):
             .values("id", "nombre", "cat", "marc")
         )
 
-        query = list(
-            map(
-                (
-                    lambda x: {
-                        "id": x["id"],
-                        "nombre": x["nombre"],
-                        "categoria": x["cat"],
-                        "marca": x["marc"],
-                        "ventas": sum(
-                            map(
-                                (lambda x: x["unids"]),
-                                Factura_producto.objects.filter(
-                                    producto__id=x["id"]
-                                ).values("unids"),
-                            ),
-                        ),
-                    }
-                ),
-                CANT,
-            )
-        )
-        query.sort(key=(lambda x: x["ventas"]), reverse=True)
+        TOTAL = get_fact(True, CANT)
+        MENSUAL = get_fact(False, CANT)
 
-        return Response({"data": query, "count": len(query)}, status=status.HTTP_200_OK)
+        return Response({"total": TOTAL, "mensual": MENSUAL, "count": len(TOTAL)}, status=status.HTTP_200_OK)
