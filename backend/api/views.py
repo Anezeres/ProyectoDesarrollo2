@@ -1,64 +1,21 @@
-from django.shortcuts import render
+from django.contrib.auth import login, logout
+from django.db.models import F
+from rest_framework import generics, permissions, status
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from django.contrib.auth import login, logout
-from rest_framework.decorators import api_view
-from .models import *
-from django.db.models import F
-import cloudinary
-from .serializers import *
-from rest_framework import generics, permissions, status
+
 from api.models import *
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.response import Response
-   
 
-
-
-cloudinary.config(
-    cloud_name="dm4yz0etx",
-    api_key="765481554234217",
-    api_secret="vPY-MF2Atx8qVv7Rwg6pywHWiuw",
-    secure=True,
-)
-
-@api_view(["GET"])
-def ProductoList(request):
-    try:
-        aux = []
-        prod = list(Producto.objects.all())
-        imgs = list(Producto_img.objects.all())
-        
-        for i in prod:
-            temporal_img = []
-            for imagen in imgs:
-                if imagen.producto.id == i.id:
-                    temporal_img.append(imagen.img.url)
-            aux.append(
-                {
-                    "id": i.id,
-                    "nombre": i.nombre,
-                    "precio": i.precio,
-                    "marca": i.marca.nombre,
-                    "descripcion": i.descripcion,
-                    "categoria": i.categoria.nombre,
-                    "imagenes": temporal_img
-                }
-            )
-            
-
-        return JsonResponse(aux,safe=False)
-    except TimeoutError:
-        return JsonResponse({"code": 3})
-
-
-
+from .serializers import *
 
 
 # Create your views here.
 class RegCliente(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         serializer = ClienteSerializer(data=request.data)
@@ -69,7 +26,7 @@ class RegCliente(APIView):
 
 
 class UserLogin(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (AllowAny,)
     authentication_classes = (SessionAuthentication,)
 
     ##
@@ -84,7 +41,7 @@ class UserLogin(APIView):
 
 
 class UserLogout(APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (AllowAny,)
     authentication_classes = ()
 
     def post(self, request):
@@ -93,22 +50,20 @@ class UserLogout(APIView):
 
 
 class UserView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (IsAuthenticated)
     authentication_classes = (SessionAuthentication,)
 
     ##
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response({"user": serializer.data}, status=status.HTTP_200_OK)
-
-
+    
 class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminUser]
 
-
-  
+    
 class ProductCreate(generics.CreateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductSerializer
@@ -151,3 +106,33 @@ class CarritoList(APIView):
             i["image"] = img
 
         return Response({"data": query, "count": len(query)}, status=status.HTTP_200_OK)
+      
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def ProductoList(request):
+    try:
+        aux = []
+        prod = list(Producto.objects.all())
+        imgs = list(Producto_img.objects.all())
+        
+        for i in prod:
+            temporal_img = []
+            for imagen in imgs:
+                if imagen.producto.id == i.id:
+                    temporal_img.append(imagen.img.url)
+            aux.append(
+                {
+                    "id": i.id,
+                    "nombre": i.nombre,
+                    "precio": i.precio,
+                    "marca": i.marca.nombre,
+                    "descripcion": i.descripcion,
+                    "categoria": i.categoria.nombre,
+                    "imagenes": temporal_img
+                }
+            )
+            
+
+        return JsonResponse(aux,safe=False)
+    except TimeoutError:
+        return JsonResponse({"code": 3})
