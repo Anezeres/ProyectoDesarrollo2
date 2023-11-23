@@ -1,10 +1,11 @@
 from django.contrib.auth import login, logout
-from django.db.models import F
+from django.db.models import F, Sum
 from rest_framework import generics, permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from functools import reduce
 
 from api.models import *
 
@@ -34,7 +35,7 @@ class UserLogin(APIView):
         if serializer.is_valid():
             user = serializer.check_user(data)
             login(request, user)
-            return Response({"message":"you're logged in"}, status=status.HTTP_200_OK)
+            return Response({"message": "you're logged in"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -106,8 +107,45 @@ class CarritoList(APIView):
             if len(img) == 0:
                 img = None
             else:
-                img= img[0].img.url
+                img = img[0].img.url
 
             i["image"] = img
+
+        return Response({"data": query, "count": len(query)}, status=status.HTTP_200_OK)
+
+
+class MostSoldItems(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        CANT = list(
+            Producto.objects.all()
+            .annotate(marc=F("marca__nombre"))
+            .annotate(cat=F("categoria__nombre"))
+            .values("id", "nombre", "cat", "marc")
+        )
+
+        query = list(
+            map(
+                (
+                    lambda x: {
+                        "id": x["id"],
+                        "nombre": x["nombre"],
+                        "categoria": x["cat"],
+                        "marca": x["marc"],
+                        "ventas": sum(
+                            map(
+                                (lambda x: x["unids"]),
+                                Factura_producto.objects.filter(
+                                    producto__id=x["id"]
+                                ).values("unids"),
+                            ),
+                        ),
+                    }
+                ),
+                CANT,
+            )
+        )
+        query.sort(key=(lambda x: x["ventas"]), reverse=True)
 
         return Response({"data": query, "count": len(query)}, status=status.HTTP_200_OK)
