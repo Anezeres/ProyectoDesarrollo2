@@ -1,9 +1,9 @@
 import React from "react";
 
-export const Footer = () => {
+export const FooterAux = () => {
     return (
         <>
-            <footer className="bg-gray-800 text-white block xl:hidden 2xl:block overflow-x-hidden">
+            <footer className="bg-gray-800 text-white 2xl:hidden m-32 w-full overflow-x-hidden">
                 <div className="container mx-auto py-7">
                     <div className="flex flex-row justify-between px-5">
                         <div className="flex flex-col">

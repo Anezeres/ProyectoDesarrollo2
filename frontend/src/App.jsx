@@ -1,11 +1,11 @@
-import { UserForms } from "./components/UserForms"
-import { ShopingCart } from "./components/ShopingCart"
+import { UserForms } from "./pages/UserForms"
+import { ShopingCart } from "./pages/ShopingCart"
 
 function App() {
   return (
-    <>
+    <div>
       <ShopingCart />
-    </>
+    </div>
   )
 }
 
