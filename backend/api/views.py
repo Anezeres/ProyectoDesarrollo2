@@ -12,6 +12,12 @@ from api.models import *
 
 from .serializers import *
 
+cloudinary.config(
+    cloud_name="dm4yz0etx",
+    api_key="765481554234217",
+    api_secret="vPY-MF2Atx8qVv7Rwg6pywHWiuw",
+    secure=True,
+)
 
 # Create your views here.
 class RegCliente(APIView):
@@ -136,3 +142,9 @@ def ProductoList(request):
         return JsonResponse(aux,safe=False)
     except TimeoutError:
         return JsonResponse({"code": 3})
+    
+
+class ProductOfertaList(generics.ListAPIView):
+    queryset = Producto_oferta.objects.all()
+    serializer_class = ProductoOfertaSerializer
+    permission_classes = [AllowAny]

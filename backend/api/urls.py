@@ -14,6 +14,7 @@ urlpatterns = [
     path('cartAdd/', views.CarritoAdd.as_view(), name='cart-add'),
     path('cartEdit/<int:pk>', views.CarritoEdit.as_view(), name='cart-edit'),
     path('cartCliente/<str:email>', views.CarritoList.as_view(), name='cart-cliente'),
+    path('ofertas/', views.ProductOfertaList.as_view(), name = 'Producto-oferta'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
