@@ -103,8 +103,9 @@ class OfertaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductoOfertaSerializer(serializers.ModelSerializer):
-    oferta = OfertaSerializer()
-    producto = ProductSerializer()
+    oferta = OfertaSerializer(many = True, read_only = True)
+    producto = ProductSerializer(many = True, read_only = True)
     class Meta:
         model = Producto_oferta
         fields = '__all__'
+        

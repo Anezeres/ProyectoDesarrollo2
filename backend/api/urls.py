@@ -14,7 +14,12 @@ urlpatterns = [
     path('cartAdd/', views.CarritoAdd.as_view(), name='cart-add'),
     path('cartEdit/<int:pk>', views.CarritoEdit.as_view(), name='cart-edit'),
     path('cartCliente/<str:email>', views.CarritoList.as_view(), name='cart-cliente'),
-    path('ofertas/', views.ProductOfertaList.as_view(), name = 'Producto-oferta'),
+    path('ofertaedit/<int:pk>', views.OfertaEdit.as_view(), name = 'oferta-edit'),
+    path('ofertaaad/', views.OfertaAdd.as_view(), name = 'oferta-add'),
+    path('prodofertaslist/', views.ProductOfertaList.as_view(), name = 'Producto-oferta-list'),
+    path('prodofertagetdel/<int:pk>', views.ProductoOfertaGetDel.as_view(), name = 'Producto-oferta-get-delete'),
+    path('prodofertaadd/', views.ProductoOfertaAdd.as_view(), name='Producto-oferta-add'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
+

@@ -3,7 +3,8 @@ from rest_framework.test import APIClient
 from api.models import *
 from django.urls import reverse
 from rest_framework import status
-
+from django.db import transaction
+import json
 
 class RegisterTestCase(TestCase):
     def setUp(self):
@@ -260,3 +261,83 @@ class ProductoListTestCase(TestCase):
         self.assertEqual(producto["categoria"], self.producto.categoria.nombre)
         self.assertEqual(producto["marca"], self.producto.marca.nombre)
         self.assertEqual(len(producto["imagenes"]),2)
+
+
+class OfertaEditAddTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.admin_user = CustomUser.objects.create_user(email='admin@example.com', password='contraseña', is_superuser=True)
+        self.client.force_authenticate(user=self.admin_user)
+
+        
+        self.oferta = Oferta.objects.create(
+            porcentaje=10,
+            fecha_inicio='2023-11-19',
+            fecha_fin='2023-12-19'
+        )
+
+    def test_oferta_edit(self):
+        url = reverse('oferta-edit', kwargs={'pk': self.oferta.pk})
+        data = {'porcentaje': 20} 
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.oferta.refresh_from_db()
+        self.assertEqual(self.oferta.porcentaje, 20)
+
+    def test_oferta_add(self):
+        url = reverse('oferta-add')
+        data = {'porcentaje': 15, 'fecha_inicio': '2023-11-20', 'fecha_fin': '2023-12-20'} 
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(Oferta.objects.filter(porcentaje=15).exists())
+
+
+class ProductoOfertaTests(TestCase):
+    def setUp(self):
+        self.admin_user = CustomUser.objects.create_user(email='yonofui@example.com', password='contraseña', is_superuser=True)
+        self.client.login(email='yonofui@example.com', password='contraseña')
+        
+        self.producto = Producto.objects.create(
+            nombre="Pantalon generico",
+            precio=10000,
+            descripcion="Pantalon muy comodo en varios colores.",
+            marca=Marca.objects.create(nombre="Marca generica"),
+            categoria=Categoria.objects.create(nombre="Pantalon"),
+        )
+
+        self.oferta = Oferta.objects.create(
+            porcentaje=10, 
+            fecha_inicio='2023-11-19', 
+            fecha_fin='2023-12-19')
+        
+        with transaction.atomic():
+            self.producto_oferta = Producto_oferta.objects.create()
+            self.producto_oferta.producto.add(self.producto)
+            self.producto_oferta.oferta.add(self.oferta)
+
+    def test_list_productos_oferta(self):
+        url = reverse('Producto-oferta-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+
+    def test_retrieve_productos_oferta(self):
+        url = reverse('Producto-oferta-get-delete', kwargs={'pk': self.producto_oferta.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+
+    def test_create_productos_oferta(self):
+        url = reverse('Producto-oferta-add')
+        data = {
+            'producto': self.producto.pk,
+            'oferta': self.oferta.pk
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+                
+
+    def test_delete_productos_oferta(self):
+        url = reverse('Producto-oferta-get-delete', kwargs={'pk': self.producto_oferta.pk})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
