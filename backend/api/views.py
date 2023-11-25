@@ -12,13 +12,6 @@ from api.models import *
 
 from .serializers import *
 
-cloudinary.config(
-    cloud_name="dm4yz0etx",
-    api_key="765481554234217",
-    api_secret="vPY-MF2Atx8qVv7Rwg6pywHWiuw",
-    secure=True,
-)
-
 # Create your views here.
 class RegCliente(APIView):
     permission_classes = (AllowAny,)
