@@ -131,7 +131,7 @@ export const ShopingCart = () => {
                         <p>Enviado</p>
                     </div>
                 </div>
-                <div className="flex flex-col m-0 2xl:m-8 h-[72vh] items-center 2xl:flex-row 2xl:overflow-hidden 2xl:items-start"> 
+                <div className="flex flex-col m-0 2xl:m-8 xl:h-[80vh] items-center 2xl:flex-row 2xl:overflow-hidden 2xl:items-start"> 
                     <div className="flex flex-col w-2/3">
                         <ProductSummary
                             handleAddProduct={handleAddProduct}

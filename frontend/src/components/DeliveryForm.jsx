@@ -25,10 +25,10 @@ export const DeliveryForm = ( {handleCancel} ) => {
                 <div className="xl:mt-4 2xl:mt-5">
                     <input type="email" placeholder="Correo Electronico" className="border border-gray-600 px-2 xl:py-1 2xl:py-2 w-full xl:text-xl 2xl:text-2xl"/>
                 </div>
-                <div className="xl:mt-1 2xl:mt-5">
+                <div className="mt-2">
                     <button className="bg-white text-black w-full py-2 xl:mt-2 2xl:mt-5 text-center rounded-xl xl:text-xl 2xl:text-2xl font-semibold border-2 border-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-200">Enviar</button>
                 </div>
-                <div className="xl:mt-2 2xl:mt-5">
+                <div className="mt-2">
                     <button type="button" className="bg-white text-black w-full py-2 mt-0 text-center rounded-xl xl:text-xl 2xl:text-2xl font-semibold border-2 border-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-200" onClick={handleCancel}>Cancelar</button>
                 </div>  
             </form>
