@@ -108,7 +108,7 @@ export const ShopingCart = () => {
     }
 
     return (
-        <div className="flex flex-col overflow-x-hidden">
+        <div className="flex flex-col">
             <Header />
             <div className="container mx-auto overflow-x-hidden">
                 <div className="flex justify-center items-center flex-col">
