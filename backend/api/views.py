@@ -15,7 +15,6 @@ from api.models import *
 
 from .serializers import *
 
-
 # Create your views here.
 class RegCliente(APIView):
     permission_classes = (AllowAny,)
@@ -139,6 +138,42 @@ def ProductoList(request):
         return JsonResponse(aux,safe=False)
     except TimeoutError:
         return JsonResponse({"code": 3})
+      
+
+class OfertaEdit(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Oferta.objects.all()
+    serializer_class = OfertaSerializer
+    permission_classes = [IsAdminUser]
+
+class OfertaAdd(generics.CreateAPIView):
+    queryset = Oferta.objects.all()
+    serializer_class = OfertaSerializer
+    permission_classes = [IsAdminUser]
+
+class ProductOfertaList(generics.ListAPIView):
+    queryset = Producto_oferta.objects.all()
+    serializer_class = ProductoOfertaSerializer
+    permission_classes = [AllowAny]
+
+class ProductoOfertaGetDel(generics.RetrieveDestroyAPIView):
+    queryset = Producto_oferta.objects.all()
+    serializer_class = ProductoOfertaSerializer
+    permission_classes = [IsAdminUser]
+
+    
+class ProductoOfertaAdd(generics.CreateAPIView):
+    queryset = Producto_oferta.objects.all()
+    serializer_class = ProductoOfertaSerializer
+    permission_classes = [IsAdminUser]
+
+    def perform_create(self, serializer):
+        oferta_id = self.request.data.get('oferta')
+        producto_id = self.request.data.get('producto')
+
+        if oferta_id is not None and producto_id is not None:
+            producto_oferta_instance = serializer.save()
+            producto_oferta_instance.oferta.add(oferta_id)
+            producto_oferta_instance.producto.add(producto_id)
 
 class MostSoldItems(APIView):
     permission_classes = [IsAdminUser]
