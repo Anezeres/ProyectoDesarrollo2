@@ -5,12 +5,16 @@ export const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
-
+    
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+        
+        const DOTENV = require('dotenv').config();
+        console.log("Hola", DOTENV)
+        const apiUrl = process.env.URL + "/api/login/";
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/login', {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

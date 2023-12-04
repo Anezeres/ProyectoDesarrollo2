@@ -22,7 +22,12 @@ export const RegisterForm = () => {
 
 
         // Construye la URL con los parámetros proporcionados
-        const apiUrl = `http://127.0.0.1:8000/api/cliente/`;
+
+
+        const DOTENV = require('dotenv').config();
+        const apiUrl = process.env.URL + "/api/cliente/";
+
+        console.log("API: ", apiUrl)
 
         try {
             const response = await fetch(apiUrl, {
