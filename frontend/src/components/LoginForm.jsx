@@ -12,8 +12,6 @@ export const LoginForm = () => {
         const url = import.meta.env.VITE_URL
         const apiUrl = url + "/api/login";
 
-        console.log("URL: ", url)
-
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -24,7 +22,6 @@ export const LoginForm = () => {
                 credentials: 'include',
             });
 
-            console.log("Hola mundo")
 
             if (!response.ok) {
                 throw new Error(`Error en la solicitud: ${response.status}`);

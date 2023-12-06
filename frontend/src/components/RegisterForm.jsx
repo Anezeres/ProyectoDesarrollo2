@@ -24,8 +24,6 @@ export const RegisterForm = () => {
         const url = import.meta.env.VITE_URL
         const apiUrl = url + "/api/cliente/";
 
-        console.log("API: ", apiUrl)
-
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
