@@ -176,5 +176,5 @@ CORS_ALLOW_METHODS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    os.getenv("POSTGRES_URL"),
 ]

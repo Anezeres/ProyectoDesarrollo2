@@ -21,11 +21,8 @@ export const RegisterForm = () => {
         };
 
 
-        // Construye la URL con los parámetros proporcionados
-
-
-        const DOTENV = require('dotenv').config();
-        const apiUrl = process.env.URL + "/api/cliente/";
+        const url = import.meta.env.VITE_URL
+        const apiUrl = url + "/api/cliente/";
 
         console.log("API: ", apiUrl)
 
@@ -81,7 +78,6 @@ export const RegisterForm = () => {
                     <button className="bg-amber-600 text-white w-full py-2 mt-5 text-center rounded-xl text-2xl font-semibold">Registrarse</button>
                 </div>
             </form>
-            {<p>{resultadoConsulta}</p>}
         </div>
     );
 }

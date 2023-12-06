@@ -9,9 +9,10 @@ export const LoginForm = () => {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         
-        const DOTENV = require('dotenv').config();
-        console.log("Hola", DOTENV)
-        const apiUrl = process.env.URL + "/api/login/";
+        const url = import.meta.env.VITE_URL
+        const apiUrl = url + "/api/login";
+
+        console.log("URL: ", url)
 
         try {
             const response = await fetch(apiUrl, {
@@ -53,8 +54,6 @@ export const LoginForm = () => {
                     <button className="bg-amber-600 text-white w-full py-2 mt-5 text-center rounded-xl text-2xl font-semibold">Iniciar Sesión</button>
                 </div>
             </form>
-
-            <p>{responseMessage}</p>
         </div>
     );
 }
