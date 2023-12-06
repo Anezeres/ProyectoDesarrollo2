@@ -91,3 +91,21 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
         fields = '__all__'
+        
+class CarritoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Carrito
+        fields = '__all__'
+
+class OfertaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Oferta
+        fields = '__all__'
+
+class ProductoOfertaSerializer(serializers.ModelSerializer):
+    oferta = OfertaSerializer(many = True, read_only = True)
+    producto = ProductSerializer(many = True, read_only = True)
+    class Meta:
+        model = Producto_oferta
+        fields = '__all__'
+        
