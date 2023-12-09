@@ -91,6 +91,8 @@ class Factura(models.Model):
 class Factura_producto(models.Model):
     factura = models.ManyToManyField(Factura)
     producto = models.ManyToManyField(Producto)
+    color = models.ManyToManyField(Color)
+    talla = models.ManyToManyField(Talla)
     unids = models.PositiveIntegerField()
     precio = models.PositiveBigIntegerField()
 

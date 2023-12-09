@@ -1,10 +1,10 @@
-import { RegisterForm } from "./components/RegisterForm"
+import { UserForms } from "./pages/UserForms"
 
 function App() {
   return (
     <>
       <div>
-        <RegisterForm />
+        <UserForms/>
       </div>
     </>
   )
