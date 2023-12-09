@@ -8,5 +8,5 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE ${PORT}
-ENTRYPOINT [ "sh", "/app/entrypoint.sh" ]
+EXPOSE 8000
+ENTRYPOINT [ "/bin/bash", "/code/entrypoint.sh"]
