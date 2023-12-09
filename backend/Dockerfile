@@ -5,7 +5,7 @@ RUN pip install --upgrade pip
 
 COPY . .
 
-RUN pip install -r requirements.txt
+RUN pip install -r /code/requirements.txt
 
 EXPOSE 8000
 ENTRYPOINT [ "/bin/bash", "/code/entrypoint.sh"]
