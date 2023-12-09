@@ -3,13 +3,11 @@ WORKDIR /code
 
 RUN pip install --upgrade pip 
 
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
 COPY . .
-
-RUN ls -a
-
-RUN pwd
-
-RUN pip install -r /code/requirements.txt
 
 EXPOSE 8000
 ENTRYPOINT [ "/bin/bash", "/code/entrypoint.sh"]
