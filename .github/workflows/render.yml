@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./frontkend/Dockerfile
+          file: ./frontend/Dockerfile
           push: true
           tags: ${{ secrets.FRONT_REP }}:latest, ${{ secrets.FRONT_REP }}:${{ github.ref_name }}
           labels: frontend
