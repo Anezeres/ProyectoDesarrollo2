@@ -5,6 +5,10 @@ RUN pip install --upgrade pip
 
 COPY . .
 
+RUN ls -a
+
+RUN pwd
+
 RUN pip install -r /code/requirements.txt
 
 EXPOSE 8000
